@@ -1,5 +1,4 @@
-import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 import './App.css';
@@ -12,13 +11,26 @@ axios.defaults.baseURL = 'http://192.168.1.11:8000/api';
 
 
 function App() {
-  return (
-      <BrowserRouter>
-        <Route exact path="/" component={Home}/>
-        <Route exact path="/login" component={HorizontalLoginForm}/>
-        <Route exact path="/signin" component={WrappedRegistrationForm}/>
-      </BrowserRouter>
-  );
+  const [page, setPage] = useState('home');
+  const changePage = (page) => {
+    setPage(page)
+  }
+  if(page === 'home') {
+    return (<Home changePage={changePage} />)
+  }
+  if(page === 'login') {
+    return (<HorizontalLoginForm changePage={changePage} />)
+  }
+  if(page === 'signin') {
+    return (<WrappedRegistrationForm changePage={changePage} />)
+  }
+  // return (    
+      // <BrowserRouter>
+      //   <Route exact path="/" component={Home}/>
+      //   <Route exact path="/login" component={HorizontalLoginForm}/>
+      //   <Route exact path="/signin" component={WrappedRegistrationForm}/>
+      // </BrowserRouter>
+  // );
 }
 
 export default App;

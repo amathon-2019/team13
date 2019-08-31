@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Form, Icon, Input, Button } from 'antd';
 
 import './App.css';
@@ -30,7 +29,7 @@ class NormalLoginForm extends React.Component {
       })
       if (!!result.data.token && result.data.token.length > 0) {
         localStorage.setItem('token', result.data.token);
-        this.props.history.push('/');
+        this.props.changePage('home')
       }
     } catch(error) {
       console.log(error)
@@ -72,10 +71,10 @@ class NormalLoginForm extends React.Component {
               Log in
             </Button>
             <br />
-            <Link className="login-form-forgot" to="">
+            <span className="login-form-forgot" style={{color: 'blue'}}>
               Forgot password&nbsp;
-            </Link>
-            Or <Link to="/signin">register now!</Link>
+            </span>
+            Or <span onClick={() => this.props.changePage('signin')} style={{color: 'blue'}}>register now!</span>
           </Form.Item>
         </Form>
       </div>

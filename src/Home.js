@@ -21,7 +21,7 @@ const Home = (props) => {
     } catch(error) {
       console.log(error);
       localStorage.removeItem('token')
-      props.history.push('/login')
+      props.changePage('login')
     }
   }
 
@@ -59,13 +59,13 @@ const Home = (props) => {
         const result = JSON.parse(event.data)
         if(!result.is_logged_in) {
           localStorage.removeItem('token')
-          props.history.push('/login')
+          props.changePage('login')
         } else {
           setDevices(result.data)
         }
       }
     } else {
-      props.history.push('/login')
+      props.changePage('login')
     }
   }, [])
   return (
@@ -73,7 +73,7 @@ const Home = (props) => {
       <br />
       <div onClick={()=> {
         localStorage.removeItem('token')
-        props.history.push('/login')
+        props.changePage('login')
       }}>로그아웃</div>
       <h1>{username}님이 로그인 하셨습니다.</h1>
       <TabsCard histories={histories} devices={devices} logOut={logOut} />

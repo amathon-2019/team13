@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
 import {
   Form,
   Input,
@@ -35,7 +34,7 @@ class RegistrationForm extends React.Component {
         })
         if (!!result.data.token && result.data.token.length > 0) {
           localStorage.setItem('token', result.data.token);
-          this.props.history.push('/');
+          this.props.changePage('home')
         }
       } else {
         alert('이미 존재하는 username 입니다.')
@@ -155,7 +154,7 @@ class RegistrationForm extends React.Component {
           </Form.Item>
         </Form>
         <div>
-        <Link to="/login">로그인 페이지로 가기</Link>
+        <span onClick={() => this.props.changePage('login')}>로그인 페이지로 가기</span>
         </div>
       </div>
     );
