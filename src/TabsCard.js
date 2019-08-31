@@ -1,0 +1,69 @@
+import React from 'react'
+import { Card,Button } from 'antd';
+import moment from 'moment';
+
+const tabList = [
+  {
+    key: 'tab1',
+    tab: '로그인 이력',
+  },
+  {
+    key: 'tab2',
+    tab: '디바이스목록',
+  },
+];
+
+class TabsCard extends React.Component {
+  state = {
+    key: 'tab1',
+    noTitleKey: 'app',
+  };
+
+  onTabChange = (key, type) => {
+    this.setState({ [type]: key });
+  };
+
+  render() {
+    const log = this.props.histories.map(history => {
+      return (
+        <p key={history.created}>
+          {moment(history.created).format('YYYY년 MM월 DD일 HH:mm:ss')} / {history.device === 0 ? 'PC' : 'Mobile'}
+        </p>
+      )
+    });
+    const devices = this.props.devices.map(d => {
+      const token = localStorage.getItem('token');
+      if (token === d.key) return;
+      return (
+        <div key={d.created} style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div>
+          {moment(d.updated).format('YYYY년 MM월 DD일 HH:mm:ss')} / {d.device === 0 ? 'PC' : 'Mobile'}
+          </div>
+          <Button onClick={()=> this.props.logOut(d.key)}>로그아웃</Button>
+        </div>
+      )
+    })
+    const contentList = {
+      tab1: log,
+      tab2: devices
+    };
+    
+    return (
+      <div>
+        <Card
+          style={{ width: '100%' }}
+          title="로그인 이력"
+          tabList={tabList}
+          activeTabKey={this.state.key}
+          onTabChange={key => {
+            this.onTabChange(key, 'key');
+          }}
+        >
+          {contentList[this.state.key]}
+        </Card>
+      </div>
+    );
+  }
+}
+
+export default TabsCard;
