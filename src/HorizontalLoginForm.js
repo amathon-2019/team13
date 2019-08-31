@@ -9,7 +9,6 @@ function isTouchAble(){
   else{ return 0; } 
 }
 
-
 class NormalLoginForm extends React.Component {
   handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +32,9 @@ class NormalLoginForm extends React.Component {
       }
     } catch(error) {
       console.log(error)
-      alert(error.response.data.message)
+      if(!!error.response && error.response.data && error.response.message) {
+        alert(error.response.data.message)
+      }
     }
   };
 

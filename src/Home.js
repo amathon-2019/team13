@@ -32,7 +32,6 @@ const Home = (props) => {
           Authorization: `Bearer ${token}`
         }
       })
-      console.log(22, result.data)
       setDevices(result.data)
     } catch(error) {
       console.log(error);
@@ -55,7 +54,6 @@ const Home = (props) => {
         socket.current.send(JSON.stringify(data));
       }
       socket.current.onmessage = (event) => {
-        console.log(event.data)
         const result = JSON.parse(event.data)
         if(!result.is_logged_in) {
           localStorage.removeItem('token')
