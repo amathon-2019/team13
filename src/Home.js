@@ -65,11 +65,11 @@ const Home = ({changePage}) => {
           }
         }
       }
+      return () => {
+        socket.current.close();
+      }
     } else {
       changePage('login')
-    }
-    return () => {
-      socket.current.close();
     }
   }, [changePage, login])
   return (
