@@ -31,9 +31,10 @@ class TabsCard extends React.Component {
         </p>
       )
     });
-    const devices = this.props.devices.map(d => {
+    const devices = this.props.devices.filter(d=> {
       const token = localStorage.getItem('token');
-      if (token === d.key) return;
+      return token !== d.key
+    }).map(d => {
       return (
         <div key={d.created} style={{display: 'flex', justifyContent: 'space-between'}}>
           <div>
@@ -45,14 +46,14 @@ class TabsCard extends React.Component {
     })
     const contentList = {
       tab1: log,
-      tab2: devices
+      tab2: this.props.devices.length > 1 ? devices : <p>원격 로그인 된 기기가 없습니다.</p>
     };
     
     return (
-      <div>
+      <div style={{textAlign: 'left'}}>
         <Card
           style={{ width: '100%' }}
-          title="로그인 이력"
+          // title="로그인 이력"
           tabList={tabList}
           activeTabKey={this.state.key}
           onTabChange={key => {

@@ -1,15 +1,16 @@
-import React, {useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import axios from 'axios';
 
 import TabsCard from './TabsCard'
+import { object } from 'prop-types';
 
-const Home = (props) => {
+const Home = ({changePage}) => {
   const [username, setUsername] = useState('');
   const [histories, setHistories] = useState([]);
   const [devices, setDevices] = useState([]);
   const socket = useRef(null);
 
-  const login = async (token) => {
+  const login = useCallback(async (token) => {
     try {
       const result = await axios.get('/histories/', {
         headers: {
@@ -21,9 +22,9 @@ const Home = (props) => {
     } catch(error) {
       console.log(error);
       localStorage.removeItem('token')
-      props.changePage('login')
+      changePage('login')
     }
-  }
+  }, [changePage])
 
   const fetchDeviceList = async (token) => {
     try {
@@ -47,33 +48,42 @@ const Home = (props) => {
     if(!!token && token.length > 0) {
       login(token);
       fetchDeviceList(token);
-      socket.current = new WebSocket(`ws://192.168.1.11:8000/user/check/?token=${token}`);
-      socket.current.onopen = () => {
-        console.log('connect')
-        const data = { status : 'login' }
-        socket.current.send(JSON.stringify(data));
-      }
-      socket.current.onmessage = (event) => {
-        const result = JSON.parse(event.data)
-        if(!result.is_logged_in) {
-          localStorage.removeItem('token')
-          props.changePage('login')
-        } else {
-          setDevices(result.data)
+      if (!(socket.current instanceof object)) {
+        socket.current = new WebSocket(`wss://6dbb1786.ngrok.io/user/check/?token=${token}`);
+        socket.current.onopen = () => {
+          console.log('connect')
+          const data = { status : 'login' }
+          socket.current.send(JSON.stringify(data));
+        }
+        socket.current.onmessage = (event) => {
+          const result = JSON.parse(event.data)
+          if(!result.is_logged_in) {
+            localStorage.removeItem('token')
+            changePage('login')
+          } else {
+            setDevices(result.data)
+          }
         }
       }
     } else {
-      props.changePage('login')
+      changePage('login')
     }
-  }, [])
+    return () => {
+      socket.current.close();
+    }
+  }, [changePage, login])
   return (
-    <div style={{margin: '16px'}}>
+    <div style={{margin: '16px', textAlign: 'center'}}>
       <br />
-      <div onClick={()=> {
+      <h1 style={{display: 'inline-block'}}>{username}님이 로그인 하셨습니다.</h1><span onClick={()=> {
         localStorage.removeItem('token')
-        props.changePage('login')
-      }}>로그아웃</div>
-      <h1>{username}님이 로그인 하셨습니다.</h1>
+        changePage('login')
+      }}
+      style={{
+        color: 'blue',
+        marginLeft: '8px',
+      }}
+      >로그아웃</span>
       <TabsCard histories={histories} devices={devices} logOut={logOut} />
     </div>
   )

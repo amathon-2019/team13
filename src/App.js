@@ -7,7 +7,7 @@ import HorizontalLoginForm from './HorizontalLoginForm';
 import WrappedRegistrationForm from './WrappedRegistrationForm';
 
 
-axios.defaults.baseURL = 'http://192.168.1.11:8000/api';
+axios.defaults.baseURL = 'https://6dbb1786.ngrok.io/api';
 
 
 function App() {
@@ -24,13 +24,6 @@ function App() {
   if(page === 'signin') {
     return (<WrappedRegistrationForm changePage={changePage} />)
   }
-  // return (    
-      // <BrowserRouter>
-      //   <Route exact path="/" component={Home}/>
-      //   <Route exact path="/login" component={HorizontalLoginForm}/>
-      //   <Route exact path="/signin" component={WrappedRegistrationForm}/>
-      // </BrowserRouter>
-  // );
 }
 
 export default App;
