@@ -26,9 +26,14 @@ class TabsCard extends React.Component {
   render() {
     const log = this.props.histories.map(history => {
       return (
-        <p key={history.created}>
-          {moment(history.created).format('YYYY년 MM월 DD일 HH:mm:ss')} / {history.device === 0 ? 'PC' : 'Mobile'}
-        </p>
+        <div key={history.created} style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div>
+            {moment(history.created).format('YYYY년 MM월 DD일 HH:mm:ss')}
+          </div>
+          <div>
+            {history.device === 0 ? 'PC' : 'Mobile'}
+          </div>
+        </div>
       )
     });
     const devices = this.props.devices.filter(d=> {
@@ -38,7 +43,10 @@ class TabsCard extends React.Component {
       return (
         <div key={d.created} style={{display: 'flex', justifyContent: 'space-between'}}>
           <div>
-          {moment(d.updated).format('YYYY년 MM월 DD일 HH:mm:ss')} / {d.device === 0 ? 'PC' : 'Mobile'}
+            {moment(d.updated).format('YYYY년 MM월 DD일 HH:mm:ss')}
+          </div>
+          <div>
+            {d.device === 0 ? 'PC' : 'Mobile'}
           </div>
           <Button onClick={()=> this.props.logOut(d.key)}>로그아웃</Button>
         </div>
